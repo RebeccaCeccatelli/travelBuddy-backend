@@ -70,6 +70,15 @@ public class Provider {
         return servicesManager.getServices();
     }
 
+    public double getProviderRating() {
+        return reviewsManager.calculateAverageRating();
+    }
+
+    public double getServiceRating(String service) {
+        return reviewsManager.calculateAverageRating(service);
+    }
+
+
     public static int findProviderIdByNameAndAddress(String providerName, String address) {
         int providerId = 0;
         //TODO search providerId in database using name and address
