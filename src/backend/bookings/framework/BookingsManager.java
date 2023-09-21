@@ -52,6 +52,7 @@ public abstract class BookingsManager {
         if (created) {
             bookings.add(booking);
         }
+
         return created;
     }
 

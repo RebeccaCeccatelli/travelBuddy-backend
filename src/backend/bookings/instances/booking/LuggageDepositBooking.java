@@ -26,7 +26,7 @@ public class LuggageDepositBooking extends Booking {
     }
 
     @Override
-    protected boolean updateServiceSpecificInformationInDB(Map<String, Object> modifications) {
+    protected boolean updateServiceSpecificInformationInDB() {
         return false;
     }
 }

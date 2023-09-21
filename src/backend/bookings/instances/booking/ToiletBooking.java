@@ -15,8 +15,10 @@ public class ToiletBooking extends Booking {
     protected boolean setServiceSpecificInformation(Object... serviceSpecificInformation) {
         boolean valid = false;
         if (serviceSpecificInformation != null && serviceSpecificInformation.length > 0) {
-            if (isEndTimeValid(endTime)) {
-                this.endTime = (Time) serviceSpecificInformation[0];
+            Time time = (Time) serviceSpecificInformation[0];
+            if (isEndTimeValid(time)) {
+                this.endTime = time;
+                valid = true;
             }
         }
         return valid;
@@ -50,7 +52,7 @@ public class ToiletBooking extends Booking {
     }
 
     @Override
-    protected boolean updateServiceSpecificInformationInDB(Map<String, Object> modifications) {
+    protected boolean updateServiceSpecificInformationInDB() {
         boolean modified = false;
         //TODO modify information in database
         return modified;

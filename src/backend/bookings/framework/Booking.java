@@ -49,12 +49,12 @@ public abstract class Booking {
     public boolean modify(Map<String, Object> modifications) {
         boolean modified = false;
         if (modifyGeneralInformation(modifications)) {
-            if (updateGeneralInformationInDB(modifications)) {
+            if (updateGeneralInformationInDB()) {
                 modified = true;
             }
         }
-        else if (modifyServiceSpecificInformation(modifications)) {
-            if (updateServiceSpecificInformationInDB(modifications)) {
+        if (modifyServiceSpecificInformation(modifications)) {
+            if (updateServiceSpecificInformationInDB()) {
                 modified = true;
             }
         }
@@ -140,13 +140,13 @@ public abstract class Booking {
 
     protected abstract boolean modifyServiceSpecificInformation(Map<String, Object> modifications);
 
-    private boolean updateGeneralInformationInDB(Map<String, Object> modifications) {
-        boolean modified = false;
+    private boolean updateGeneralInformationInDB() {
+        boolean updated = false;
         //TODO modify information in database
-        return modified;
+        return updated;
     }
 
-    protected  abstract  boolean updateServiceSpecificInformationInDB(Map<String, Object> modifications);
+    protected  abstract  boolean updateServiceSpecificInformationInDB();
 
     private boolean isDateValid(Date date) {
         boolean valid = false;
