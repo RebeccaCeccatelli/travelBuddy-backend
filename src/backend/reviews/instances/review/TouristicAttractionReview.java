@@ -4,6 +4,11 @@ import backend.reviews.framework.Review;
 
 public class TouristicAttractionReview extends Review {
     @Override
+    public String getServiceReviewed() {
+        return "Touristic attraction";
+    }
+
+    @Override
     protected boolean cancelServiceSpecificInformationFromDB() {
         return false;
     }

@@ -4,6 +4,11 @@ import backend.reviews.framework.Review;
 
 public class LuggageDepositReview extends Review {
     @Override
+    public String getServiceReviewed() {
+        return "Luggage deposit";
+    }
+
+    @Override
     protected boolean cancelServiceSpecificInformationFromDB() {
         return false;
     }

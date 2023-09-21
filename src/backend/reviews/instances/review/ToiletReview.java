@@ -46,6 +46,11 @@ public class ToiletReview extends Review {
 
 
     @Override
+    public String getServiceReviewed() {
+        return "Toilet";
+    }
+
+    @Override
     protected boolean cancelServiceSpecificInformationFromDB() {
         boolean cancelled = false;
         //TODO cancel service specific information from database

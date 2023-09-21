@@ -5,6 +5,7 @@ import backend.bookings.instances.booking.*;
 import backend.reviews.instances.review.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class ReviewsManager {
     protected ArrayList<Review> reviews = new ArrayList<>();
@@ -86,6 +87,37 @@ public abstract class ReviewsManager {
             }
         }
         return null;
+    }
+
+    public double calculateAverageRating() {
+        double averageRating = 0;
+        if (!reviews.isEmpty()) {
+            for (Review review : reviews) {
+                averageRating += review.rating;
+            }
+            averageRating = averageRating / reviews.size();
+        }
+        return averageRating;
+    }
+
+    public double calculateAverageRating(String service) {
+        double averageRating = 0;
+        if (!reviews.isEmpty()) {
+            int serviceReviews = 0;
+            for (Review review : reviews) {
+                if (Objects.equals(review.getServiceReviewed(), service)) {
+                    averageRating += review.rating;
+                    serviceReviews++;
+                }
+            }
+
+            if (serviceReviews > 0) {
+                averageRating = averageRating / serviceReviews;
+            } else {
+                averageRating = 0;
+            }
+        }
+        return averageRating;
     }
 }
 

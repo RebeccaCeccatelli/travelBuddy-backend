@@ -6,6 +6,8 @@ public abstract class Review {
     protected String reviewText;
     protected double rating;
 
+    public abstract String getServiceReviewed();
+
     public boolean create(int bookingId, String reviewText, double rating, Object... serviceSpecificInformation) {
         boolean created = false;
         if (setGeneralInformation(bookingId, reviewText, rating)) {
