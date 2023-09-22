@@ -1,8 +1,8 @@
 package backend.localization.services;
 
-import backend.members.providers.framework.Provider;
-import backend.members.providers.framework.ProvidersManager;
-import backend.members.users.framework.User;
+import backend.accounts.providers.framework.Provider;
+import backend.accounts.providers.framework.ProvidersManager;
+import backend.accounts.users.framework.User;
 import backend.services.framework.Service;
 
 import java.util.ArrayList;

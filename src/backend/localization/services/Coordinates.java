@@ -1,6 +1,6 @@
 package backend.localization.services;
 
-import backend.members.common.framework.Address;
+import backend.accounts.common.features.framework.Address;
 
 import java.util.ArrayList;
 

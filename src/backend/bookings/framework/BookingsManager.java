@@ -2,7 +2,7 @@ package backend.bookings.framework;
 
 import backend.bookings.instances.booking.*;
 import backend.payment.methods.framework.PaymentMethod;
-import backend.members.providers.framework.Provider;
+import backend.accounts.providers.framework.Provider;
 
 import java.sql.Date;
 import java.sql.Time;
