@@ -29,26 +29,6 @@ public class Address{
         return value == null || value.trim().isEmpty();
     }
 
-    void setStreet(String street) {
-        this.street = street;
-    }
-
-    void setCivicNumber(String civicNumber) {
-        this.civicNumber = civicNumber;
-    }
-
-    void setPostCode(String postCode) {
-        this.postCode = postCode;
-    }
-
-    void setCity(String city) {
-        this.city = city;
-    }
-
-    void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getStreet() {
         return street;
     }

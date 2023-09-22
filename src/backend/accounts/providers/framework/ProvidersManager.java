@@ -1,6 +1,5 @@
 package backend.accounts.providers.framework;
 
-import backend.accounts.common.features.framework.Address;
 import dao.accounts.providers.ProviderDao;
 
 import java.util.ArrayList;

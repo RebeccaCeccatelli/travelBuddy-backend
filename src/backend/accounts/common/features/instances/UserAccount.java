@@ -4,7 +4,6 @@ import backend.accounts.common.features.framework.Account;
 import dao.accounts.users.UserDao;
 
 import java.sql.Date;
-import java.util.Calendar;
 import java.util.Objects;
 
 public class UserAccount extends Account {

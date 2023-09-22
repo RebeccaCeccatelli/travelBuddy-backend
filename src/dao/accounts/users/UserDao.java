@@ -2,12 +2,10 @@ package dao.accounts.users;
 
 import backend.accounts.common.features.framework.Address;
 import backend.accounts.common.features.instances.UserAccount;
-import backend.accounts.users.framework.User;
 import dao.accounts.AccountDao;
 import dao.accounts.AddressDao;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class UserDao extends AccountDao {
 
