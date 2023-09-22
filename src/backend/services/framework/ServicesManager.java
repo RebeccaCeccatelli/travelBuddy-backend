@@ -97,7 +97,7 @@ public abstract class ServicesManager {
         return existing;
     }
 
-    private Service getServiceByType(String type) {
+    public Service getServiceByType(String type) {
         Service service = null;
         for (Service s : services) {
             if (Objects.equals(s.getServiceType(), type)) {

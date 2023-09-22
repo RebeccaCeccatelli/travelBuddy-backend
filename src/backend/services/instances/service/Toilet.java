@@ -10,7 +10,7 @@ public class Toilet extends Service {
     boolean shower;
 
     @Override
-    protected String getServiceType() {
+    public String getServiceType() {
         return "Toilet";
     }
 
@@ -63,5 +63,13 @@ public class Toilet extends Service {
         boolean cancelled = false;
         //TODO cancel from database
         return cancelled;
+    }
+
+    @Override
+    protected String setAdditionalInfoInMessage(String message) {
+        message += "Disability friendly: " + (disabilityFriendly ? "Yes" : "No") + ".\n";
+        message += "ChangingTable: " + (changingTable ? "Yes" : "No") + ".\n";
+        message += "Shower: " + (shower ? "Yes" : "No") + ".\n";
+        return message;
     }
 }

@@ -43,7 +43,7 @@ public abstract class Service {
         return valid;
     }
 
-    protected abstract String getServiceType();
+    public abstract String getServiceType();
 
     protected abstract boolean setServiceSpecificInformation(Object... serviceSpecificInformation);
 
@@ -153,4 +153,16 @@ public abstract class Service {
         //TODO check time validity
         return valid;
     }
+
+    public String getServiceInfoMessage() {
+        String message = "";
+        message += "Status: " + status.toString() + ".\n";
+        message += "Opening time: " + hours.openingTime + ", Closing time: " + hours.closingTime + ".\n";
+        message += "Payment policy: " + pricing.paymentPolicy + ", Price: " + pricing.price + ".\n";
+        message = setAdditionalInfoInMessage(message);
+        message += "Optional Notes: " + (optionalNotes.isEmpty() ? "Any" : optionalNotes) + ".\n";
+        return message;
+    }
+
+    protected abstract String setAdditionalInfoInMessage(String message);
 }

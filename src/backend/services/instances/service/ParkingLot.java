@@ -7,7 +7,7 @@ import java.util.Map;
 public class ParkingLot extends Service {
 
     @Override
-    protected String getServiceType() {
+    public String getServiceType() {
         return "Parking lot";
     }
 
@@ -34,5 +34,10 @@ public class ParkingLot extends Service {
     @Override
     protected boolean cancelServiceSpecificInformationFromDB() {
         return false;
+    }
+
+    @Override
+    protected String setAdditionalInfoInMessage(String message) {
+        return null;
     }
 }

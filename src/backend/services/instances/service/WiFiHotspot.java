@@ -7,7 +7,7 @@ import java.util.Map;
 public class WiFiHotspot extends Service {
 
     @Override
-    protected String getServiceType() {
+    public String getServiceType() {
         return "WiFi hotspot";
     }
 
@@ -34,5 +34,10 @@ public class WiFiHotspot extends Service {
     @Override
     protected boolean cancelServiceSpecificInformationFromDB() {
         return false;
+    }
+
+    @Override
+    protected String setAdditionalInfoInMessage(String message) {
+        return null;
     }
 }
