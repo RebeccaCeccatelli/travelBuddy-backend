@@ -1,8 +1,6 @@
 package backend.bookings.framework;
 
 import backend.bookings.instances.booking.*;
-import backend.payment.methods.framework.PaymentMethod;
-import backend.accounts.providers.framework.Provider;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -14,16 +12,15 @@ public abstract class BookingsManager {
     protected ArrayList<Booking> bookings = new ArrayList<>();
 
     public BookingsManager(int accountId) {
-        loadBookingsFromDatabase(accountId);
+        bookings = loadBookingsFromDatabase(accountId);
     }
 
-    protected abstract void loadBookingsFromDatabase(int accountId);
+    protected abstract ArrayList<Booking> loadBookingsFromDatabase(int accountId);
 
-    public boolean addBooking(String service, int userId, String providerName, String providerAddress, Date date, Time arrivalTime,
-                                       PaymentMethod paymentMethod, String optionalNotes,
+    public boolean addBooking(String service, int userId, int providerId, Date date, Time arrivalTime,
+                                       String optionalNotes,
                                        Object... serviceSpecificInformation) {
         boolean created = false;
-        int providerId = Provider.findProviderIdByNameAndAddress(providerName, providerAddress);
         if (providerId == 0) {
             return created;
         }
@@ -48,7 +45,7 @@ public abstract class BookingsManager {
             return created;
         }
         created = booking.create(userId, providerId, date, arrivalTime,
-                paymentMethod, optionalNotes, serviceSpecificInformation);
+                optionalNotes, serviceSpecificInformation);
         if (created) {
             bookings.add(booking);
         }

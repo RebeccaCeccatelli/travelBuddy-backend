@@ -1,6 +1,6 @@
 package backend.bookings.framework;
 
-import backend.payment.methods.framework.PaymentMethod;
+import dao.bookings.BookingDao;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -12,18 +12,26 @@ public abstract class Booking {
     protected int providerId;
     protected Date date;
     protected Time arrivalTime;
-    PaymentMethod paymentMethod;
     protected String optionalNotes;
     BookingStatus status = BookingStatus.INCOMPLETE;
 
+    public void initialize(int id, int userId, int providerId, Date date, Time arrivalTime, String optionalNotes, BookingStatus status, Object... serviceSpecificInformation) {
+        setId(id);
+        if (setGeneralInformation(userId, providerId, date, arrivalTime, optionalNotes)) {
+            setStatus(status);
+            setServiceSpecificInformation(serviceSpecificInformation);
+        }
+    }
+
     public boolean create(int userId, int providerId, Date date, Time arrivalTime,
-                          PaymentMethod paymentMethod, String optionalNotes,
+                          String optionalNotes,
                           Object... serviceSpecificInformation) {
         boolean created = false;
-        if (setGeneralInformation(userId, providerId, date, arrivalTime, paymentMethod, optionalNotes)) {
+        if (setGeneralInformation(userId, providerId, date, arrivalTime, optionalNotes)) {
             if(setServiceSpecificInformation(serviceSpecificInformation)) {
                 int id = saveGeneralInformationInDB();
                 if(id != 0) {
+                    setId(id);
                     if (saveServiceSpecificInformationInDB()) {
                         setId(id);
                         created = true;
@@ -62,7 +70,7 @@ public abstract class Booking {
     }
 
     private boolean setGeneralInformation(int userId, int providerId, Date date, Time arrivalTime,
-                                          PaymentMethod paymentMethod, String optionalNotes) {
+                                          String optionalNotes) {
         boolean valid = false;
         this.userId = userId;
         this.providerId = providerId;
@@ -70,9 +78,6 @@ public abstract class Booking {
             this.date = date;
             if (isArrivalTimeValid(arrivalTime)) {
                 this.arrivalTime = arrivalTime;
-            }
-            if(isPaymentMethodValid(paymentMethod)) {
-                this.paymentMethod = paymentMethod;
                 valid = true;
             }
         }
@@ -82,9 +87,7 @@ public abstract class Booking {
     }
 
     private int saveGeneralInformationInDB() {
-        int id = 0;
-        //TODO add to database (using id)
-        return id;
+        return new BookingDao().saveGeneralBookingInformation(userId, providerId, date, arrivalTime, optionalNotes, status);
     }
 
     protected abstract boolean setServiceSpecificInformation(Object... serviceSpecificInformation);
@@ -123,14 +126,6 @@ public abstract class Booking {
             }
         }
 
-        if (modifications.containsKey("paymentMethod")) {
-            PaymentMethod paymentMethod = (PaymentMethod) modifications.get("paymentMethod");
-            if (isPaymentMethodValid(paymentMethod)) {
-                this.paymentMethod = paymentMethod;
-                modified = true;
-            }
-        }
-
         if (modifications.containsKey("optionalNotes")) {
             this.optionalNotes = (String) modifications.get("optionalNotes");
             modified = true;
@@ -149,24 +144,18 @@ public abstract class Booking {
     protected  abstract  boolean updateServiceSpecificInformationInDB();
 
     private boolean isDateValid(Date date) {
-        boolean valid = false;
+        boolean valid = true;
         //TODO check date validity
         return valid;
     }
 
     private boolean isArrivalTimeValid(Time time) {
-        boolean valid = false;
+        boolean valid = true;
         //TODO check time validity
         return valid;
     }
 
-    private boolean isPaymentMethodValid(PaymentMethod paymentMethod) {
-        boolean valid = false;
-        //TODO check payment method validity
-        return valid;
-    }
-
-    void setStatus(BookingStatus newStatus) {
+    public void setStatus(BookingStatus newStatus) {
         this.status = newStatus;
     }
 

@@ -1,6 +1,8 @@
 package backend.bookings.instances.booking;
 
 import backend.bookings.framework.Booking;
+import dao.bookings.BookingDao;
+import dao.bookings.ToiletBookingDao;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -27,7 +29,11 @@ public class ToiletBooking extends Booking {
     @Override
     protected boolean saveServiceSpecificInformationInDB() {
         boolean saved = false;
-        //TODO add to database (using id)
+        if (new BookingDao().saveServiceType(id, "Toilet")) {
+            if (new ToiletBookingDao().saveSpecificInformation(id, endTime)) {
+                saved = true;
+            }
+        }
         return saved;
     }
 
@@ -59,7 +65,7 @@ public class ToiletBooking extends Booking {
     }
 
     private boolean isEndTimeValid(Time endTime) {
-        boolean valid = false;
+        boolean valid = true;
 
         Date arrivalDateTime = new Date(arrivalTime.getTime());
         Date endDateTime = new Date(endTime.getTime());

@@ -1,6 +1,10 @@
 package backend.bookings.instances.manager;
 
+import backend.bookings.framework.Booking;
 import backend.bookings.framework.BookingsManager;
+import dao.bookings.BookingDao;
+
+import java.util.ArrayList;
 
 public class UserBookingsManager extends BookingsManager {
     public UserBookingsManager(int accountId) {
@@ -8,7 +12,8 @@ public class UserBookingsManager extends BookingsManager {
     }
 
     @Override
-    public void loadBookingsFromDatabase(int accountId) {
-        //TODO get bookings from database (clientId here is a user id)
+    protected ArrayList<Booking> loadBookingsFromDatabase(int accountId) {
+        return new BookingDao().loadAllBookings(accountId, "User");
     }
+
 }

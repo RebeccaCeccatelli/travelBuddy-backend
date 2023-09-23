@@ -1,6 +1,6 @@
 package backend.bookings.framework;
 
-enum BookingStatus {
+public enum BookingStatus {
     INCOMPLETE,
     FUTURE,
     CANCELLED,

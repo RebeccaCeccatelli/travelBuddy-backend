@@ -30,8 +30,8 @@ public abstract class AccountDao extends Dao {
 
     public boolean checkAccountExists(String email) {
         boolean exists = false;
-        String query = "SELECT COUNT(*) FROM  \"" + getTable() +
-                "\" WHERE email = ?";
+        String query = "SELECT COUNT(*) FROM  " + getTable() +
+                " WHERE email = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {

@@ -18,34 +18,31 @@ public abstract class Account {
         }
     }
 
-    public boolean register(String email, String password, String name, Address address, String phoneNumber, Object... memberSpecificInformation) {
-        boolean registered = false;
+    public Account register(String email, String password, String name, Address address, String phoneNumber, Object... memberSpecificInformation) {
         if (!checkAccountExists(email)) {
             if (setGeneralInformation(email, password, name, address, phoneNumber)) {
                 if (setAccountSpecificInformation(memberSpecificInformation)) {
                     int id = save();
                     if (id != 0) {
                         setId(id);
-                        registered = true;
+                        return this;
                     }
                 }
             }
         }
-        return registered;
+        return null;
     }
 
-    public boolean login(String email, String password) {
-        boolean loggedIn = false;
+    public Account login(String email, String password) {
         if (checkAccountExists(email)) {
             this.email = email;
-            if (checkPasswordsMatch(password)) {
+            if (checkPasswordsMatch(email, password)) {
                 this.password = password;
-                if (load()) {
-                    loggedIn = true;
-                }
+
+                return load();
             }
         }
-        return loggedIn;
+        return null;
     }
 
     protected boolean setGeneralInformation(String email, String password, String name,
@@ -125,9 +122,9 @@ public abstract class Account {
 
     protected abstract boolean checkAccountExists(String email);
 
-    protected abstract boolean checkPasswordsMatch(String password);
+    protected abstract boolean checkPasswordsMatch(String email, String password);
 
-    protected abstract boolean load();
+    protected abstract Account load();
 
     protected abstract int save();
 }

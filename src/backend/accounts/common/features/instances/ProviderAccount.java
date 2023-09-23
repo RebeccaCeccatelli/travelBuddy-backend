@@ -9,18 +9,17 @@ public class ProviderAccount extends Account {
 
     @Override
     protected boolean checkAccountExists(String email) {
-        return false;
+        return new ProviderDao().checkAccountExists(email);
     }
 
     @Override
-    protected boolean checkPasswordsMatch(String password) {
-        return false;
+    protected boolean checkPasswordsMatch(String email, String password) {
+        return new ProviderDao().checkPasswordsMatch(email, password);
     }
 
     @Override
-    protected boolean load() {
-        boolean loaded = new ProviderDao().loadAccount(email) != null;
-        return loaded;
+    protected ProviderAccount load() {
+        return new ProviderDao().loadAccount(email);
     }
 
     @Override

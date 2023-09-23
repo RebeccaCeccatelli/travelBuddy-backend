@@ -32,19 +32,25 @@ public class User {
         return map;
     }
 
-    public User register(String email, String password, String name, Address address,
+    public boolean register(String email, String password, String name, Address address,
                             String phoneNumber, Object... memberSpecificInformation) {
-        if (account.register(email, password, name, address, phoneNumber, memberSpecificInformation)) {
+        boolean registered = false;
+        account = account.register(email, password, name, address, phoneNumber, memberSpecificInformation);
+        if (account != null) {
             setManagers();
+            registered = true;
         }
-        return this;
+        return registered;
     }
 
-    public User login(String email, String password){
-        if (account.login(email, password)) {
+    public boolean login(String email, String password){
+        boolean loggedIn = false;
+        account = account.login(email, password);
+        if (account != null) {
             setManagers();
+            loggedIn = true;
         }
-        return this;
+        return loggedIn;
     }
 
     private void setManagers() {
@@ -65,11 +71,11 @@ public class User {
         return paymentMethodsManager.removePaymentMethod(paymentMethodId);
     }
 
-    public boolean addBooking(String service, String providerName, String providerAddress, Date date, Time arrivalTime,
-                              PaymentMethod paymentMethod, String optionalNotes,
+    public boolean addBooking(String service, int providerId, Date date, Time arrivalTime,
+                              String optionalNotes,
                               Object... serviceSpecificInformation) {
-        return bookingsManager.addBooking(service, account.getId(), providerName, providerAddress,
-                date, arrivalTime, paymentMethod, optionalNotes, serviceSpecificInformation);
+        return bookingsManager.addBooking(service, account.getId(), providerId,
+                date, arrivalTime, optionalNotes, serviceSpecificInformation);
     }
 
     public boolean modifyBooking(int bookingId, Map<String, Object> modifications) {

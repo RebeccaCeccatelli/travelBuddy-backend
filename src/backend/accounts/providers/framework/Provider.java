@@ -30,19 +30,25 @@ public class Provider {
         setManagers();
     }
 
-    public Provider register(String email, String password, String name, Address address,
+    public boolean register(String email, String password, String name, Address address,
                             String phoneNumber, Object... memberSpecificInformation) {
-        if (account.register(email, password, name, address, phoneNumber, memberSpecificInformation)) {
+        boolean registered = false;
+        account = account.register(email, password, name, address, phoneNumber, memberSpecificInformation);
+        if (account != null) {
             setManagers();
+            registered = true;
         }
-        return this;
+        return registered;
     }
 
-    public Provider login(String email, String password){
-        if (account.login(email, password)) {
+    public boolean login(String email, String password){
+        boolean loggedIn = false;
+        account = account.login(email, password);
+        if (account != null) {
             setManagers();
+            loggedIn = true;
         }
-        return this;
+        return loggedIn;
     }
 
     private void setManagers() {

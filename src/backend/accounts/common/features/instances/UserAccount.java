@@ -13,18 +13,17 @@ public class UserAccount extends Account {
 
     @Override
     protected boolean checkAccountExists(String email) {
-        return false;
+        return new UserDao().checkAccountExists(email);
     }
 
     @Override
-    protected boolean checkPasswordsMatch(String password) {
-        return false;
+    protected boolean checkPasswordsMatch(String email, String password) {
+        return new UserDao().checkPasswordsMatch(email, password);
     }
 
     @Override
-    protected boolean load() {
-        boolean loaded = new UserDao().loadAccount(email) != null;
-        return loaded;
+    protected UserAccount load() {
+        return new UserDao().loadAccount(email);
     }
 
     @Override
