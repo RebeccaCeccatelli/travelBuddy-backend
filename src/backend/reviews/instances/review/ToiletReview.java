@@ -5,7 +5,7 @@ import dao.reviews.instances.ToiletReviewDao;
 
 public class ToiletReview extends Review {
     Double cleanliness;
-    Double offeredProductsQuality;
+    Double productsQuality;
     Double bathroomSize;
     Double quietness;
     Double accessibility;
@@ -14,25 +14,25 @@ public class ToiletReview extends Review {
     protected boolean setServiceSpecificInfo(Object... serviceSpecificInformation) {
         boolean valid = false;
         if (serviceSpecificInformation != null && serviceSpecificInformation.length > 0) {
-            rating = (Double) serviceSpecificInformation[0];
-            if (isRatingValid(rating)) {
-                this.cleanliness = rating;
+            Double cleanliness = (Double) serviceSpecificInformation[0];
+            if (isRatingValid(cleanliness)) {
+                this.cleanliness = cleanliness;
             }
-            rating = (Double) serviceSpecificInformation[1];
-            if (isRatingValid(rating)) {
-                this.offeredProductsQuality = rating;
+            Double productsQuality = (Double) serviceSpecificInformation[1];
+            if (isRatingValid(productsQuality)) {
+                this.productsQuality = productsQuality;
             }
-            rating = (Double) serviceSpecificInformation[2];
-            if (isRatingValid(rating)) {
-                this.bathroomSize = rating;
+            Double bathroomSize = (Double) serviceSpecificInformation[2];
+            if (isRatingValid(bathroomSize)) {
+                this.bathroomSize = bathroomSize;
             }
-            rating = (Double) serviceSpecificInformation[3];
-            if (isRatingValid(rating)) {
-                this.quietness = rating;
+            Double quietness = (Double) serviceSpecificInformation[3];
+            if (isRatingValid(quietness)) {
+                this.quietness = quietness;
             }
-            rating = (Double) serviceSpecificInformation[4];
-            if(isRatingValid(rating)) {
-                this.accessibility = rating;
+            Double accessibility = (Double) serviceSpecificInformation[4];
+            if(isRatingValid(accessibility)) {
+                this.accessibility = accessibility;
             }
         }
         return valid;
@@ -41,7 +41,7 @@ public class ToiletReview extends Review {
     @Override
     protected int save() {
         return new ToiletReviewDao().save(bookingId, reviewText, rating, cleanliness,
-                offeredProductsQuality, bathroomSize, quietness, accessibility);
+                productsQuality, bathroomSize, quietness, accessibility);
     }
 
     @Override

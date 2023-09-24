@@ -1,7 +1,5 @@
 package backend.reviews.framework;
 
-import java.util.Map;
-
 public abstract class Review {
     protected int id;
 

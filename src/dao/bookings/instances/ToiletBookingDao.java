@@ -9,7 +9,7 @@ public class ToiletBookingDao extends BookingDao {
     public void saveServiceSpecificInfo(int bookingId, Object... serviceSpecificInfo) {
         Time endTime = (Time) serviceSpecificInfo[0];
 
-        String insertQuery = "INSERT INTO  \"Booking\".\"ToiletBooking\" (bookingId, endTime) VALUES (?, ?)";
+        String insertQuery = "INSERT INTO  " + getTableName() + " (bookingId, endTime) VALUES (?, ?)";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
@@ -59,5 +59,9 @@ public class ToiletBookingDao extends BookingDao {
         boolean updated = false;
         //TODO update row corresponding to bookingId in ToiletBooking table
         return updated;
+    }
+
+    private String getTableName() {
+        return "\"Booking\".\"ToiletBooking\"";
     }
 }

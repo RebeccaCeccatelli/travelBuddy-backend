@@ -111,7 +111,7 @@ public abstract class BookingDao extends Dao {
         try {
             connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
-            String insertQuery = "INSERT INTO" + getTableName() + " (userId, providerId, date, arrivalTime, optionalNotes, status) " +
+            String insertQuery = "INSERT INTO  " + getTableName() + " (userId, providerId, date, arrivalTime, optionalNotes, status) " +
                     "VALUES (?, ?, ?, ?, ?, ?)";
 
             preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
