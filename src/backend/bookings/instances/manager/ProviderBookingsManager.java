@@ -12,7 +12,7 @@ public class ProviderBookingsManager extends BookingsManager {
     }
 
     @Override
-    protected ArrayList<Booking> loadBookingsFromDatabase(int accountId) {
+    protected ArrayList<Booking> loadAllBookings(int accountId) {
         return BookingDao.loadAllBookings(accountId, "Provider");
     }
 }

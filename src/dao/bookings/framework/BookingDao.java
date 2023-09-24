@@ -148,7 +148,6 @@ public abstract class BookingDao extends Dao {
 
     protected void saveServiceType(int id, String service) {
         String updateQuery = "UPDATE" + getTableName() + " SET service = ? WHERE id = ?";
-
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
 

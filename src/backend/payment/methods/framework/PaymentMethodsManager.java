@@ -1,6 +1,7 @@
 package backend.payment.methods.framework;
 
 import backend.payment.methods.instances.*;
+import dao.payment.methods.framework.PaymentMethodDao;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -8,16 +9,18 @@ import java.util.Objects;
 
 public class PaymentMethodsManager {
     protected ArrayList<PaymentMethod> paymentMethods = new ArrayList<>();
+    int accountId;
 
     public PaymentMethodsManager(int accountId) {
-        loadPaymentMethodsFromDatabase(accountId);
+        this.accountId = accountId;
+        paymentMethods = loadAllPaymentMethods();
     }
 
-    protected void loadPaymentMethodsFromDatabase(int accountId){
-        //TODO to implement
+    protected ArrayList<PaymentMethod> loadAllPaymentMethods(){
+        return PaymentMethodDao.loadAllPaymentMethod(accountId);
     }
 
-    public boolean addPaymentMethod(String type, String... information) {
+    public boolean addPaymentMethod(String type, String... methodSpecificInfo) {
         boolean created = false;
 
         PaymentMethod paymentMethod;
@@ -35,7 +38,7 @@ public class PaymentMethodsManager {
         else {
             return created;
         }
-        created = paymentMethod.create(information);
+        created = paymentMethod.create(accountId, methodSpecificInfo);
         if (created) {
             paymentMethods.add(paymentMethod);
         }
@@ -46,7 +49,7 @@ public class PaymentMethodsManager {
         boolean removed = false;
         PaymentMethod paymentMethod = findPaymentMethodById(paymentMethodId);
         if (paymentMethod != null) {
-            if (paymentMethod.delete()) {
+            if (paymentMethod.remove()) {
                 paymentMethods.remove(paymentMethod);
                 removed = true;
             }
@@ -63,6 +66,10 @@ public class PaymentMethodsManager {
             }
         }
         return modified;
+    }
+
+    public ArrayList<PaymentMethod> getPaymentMethods() {
+        return paymentMethods;
     }
 
     private PaymentMethod findPaymentMethodById(int id) {

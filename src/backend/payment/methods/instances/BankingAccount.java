@@ -1,6 +1,7 @@
 package backend.payment.methods.instances;
 
 import backend.payment.methods.framework.PaymentMethod;
+import dao.payment.methods.instances.BankingAccountDao;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -13,18 +14,18 @@ public class BankingAccount extends PaymentMethod {
     protected String IBAN;
     protected String SWIFTCode;
 
-    protected boolean setInformation(String... information) {
+    protected boolean setMethodSpecificInfo(Object... methodSpecificInfo) {
         boolean valid = false;
-        this.accountHolderName = information[0];
-        this.accountHolderSurname = information[1];
-        this.bankName = information[2];
-        this.bankAddress = information[3];
+        this.accountHolderName = (String) methodSpecificInfo[0];
+        this.accountHolderSurname = (String) methodSpecificInfo[1];
+        this.bankName = (String) methodSpecificInfo[2];
+        this.bankAddress = (String) methodSpecificInfo[3];
 
-        String iban = information[4];
+        String iban = (String) methodSpecificInfo[4];
         if (isValidIBAN(iban)) {
             this.IBAN = iban;
 
-            String swift = information[5];
+            String swift = (String) methodSpecificInfo[5];
             if (isValidSWIFT(swift)) {
                 this.SWIFTCode = swift;
                 valid = true;
@@ -33,26 +34,27 @@ public class BankingAccount extends PaymentMethod {
         return valid;
     }
 
-    @Override
-    protected int saveInDB() {
-        return 0;
-    }
-
     @SafeVarargs
-    protected final boolean modifyInfo(Map<String, String>... modifications) {
+    protected final boolean modifyMethodSpecificInfo(Map<String, String>... modifications) {
         boolean modified = false;
+        //TODO
         return modified;
     }
 
-    protected boolean updateDB(){
-        boolean updated = false;
-        return updated;
+    @Override
+    protected int save() {
+        return new BankingAccountDao().save(accountId, status, accountHolderName, accountHolderSurname,
+                bankName, bankAddress, IBAN, SWIFTCode);
     }
 
-    protected boolean deleteFromDB() {
-        boolean deleted = false;
-        //TODO delete from DB
-        return deleted;
+
+    protected boolean update(){
+        return new BankingAccountDao().update(status, accountHolderName, accountHolderSurname,
+                bankName, bankAddress, IBAN, SWIFTCode);
+    }
+
+    protected boolean delete() {
+        return new BankingAccountDao().remove(id);
     }
 
     private boolean isValidIBAN(String iban) {

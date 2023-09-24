@@ -3,49 +3,71 @@ package backend.payment.methods.framework;
 import java.util.Map;
 
 public abstract class PaymentMethod {
-    int id;
-    PaymentMethodStatus status = PaymentMethodStatus.INVALID;
+    protected int id;
+    protected int accountId;
+    protected PaymentMethodStatus status = PaymentMethodStatus.INVALID;
 
-    public boolean create(String... information) {
+    public void initialize(int id, int accountId, PaymentMethodStatus status, Object... methodSpecificInfo) {
+        if (id != 0) {
+            setId(id);
+        }
+        if (setInfo(accountId, methodSpecificInfo)) {
+            setStatus(status);
+        }
+    }
+
+    public boolean create(int accountId, String... methodSpecificInfo) {
         boolean created = false;
-        if (setInformation(information)) {
-            int id = saveInDB();
+        if (setInfo(accountId, methodSpecificInfo)) {
+            setStatus(PaymentMethodStatus.VALID);
+            int id = save();
             if (id != 0) {
                 setId(id);
                 created = true;
-                setStatus(PaymentMethodStatus.VALID);
             }
         }
         return created;
     }
 
-    protected abstract boolean setInformation(String... information);
-
-    protected abstract int saveInDB();
-
     public boolean modify(Map<String, String>... modifications) {
         boolean modified = false;
-        if (modifyInfo(modifications)) {
-            if (updateDB()) {
+        if (modifyMethodSpecificInfo(modifications)) {
+            if (update()) {
                 modified = true;
             }
         }
         return modified;
     }
 
-    protected abstract boolean modifyInfo(Map<String, String>... modifications);
-
-    protected abstract boolean updateDB();
-
-    public boolean delete() {
-        boolean deleted = false;
-        if (deleteFromDB()) {
-            deleted = true;
+    public boolean remove() {
+        boolean removed = false;
+        if (delete()) {
+            removed = true;
         }
-        return deleted;
+        return removed;
     }
 
-    protected abstract boolean deleteFromDB();
+    protected abstract int save();
+
+    protected abstract boolean update();
+
+    protected abstract boolean delete();
+
+    private boolean setInfo(int accountId, Object... methodSpecificInfo) {
+        boolean set = false;
+        if (accountId != 0) {
+            this.accountId = accountId;
+
+            if (setMethodSpecificInfo(methodSpecificInfo)) {
+                set = true;
+            }
+        }
+        return set;
+    }
+
+    protected abstract boolean setMethodSpecificInfo(Object... methodSpecificInfo);
+
+    protected abstract boolean modifyMethodSpecificInfo(Map<String, String>... modifications);
 
     private void setId(int id) {
         this.id = id;
@@ -58,5 +80,4 @@ public abstract class PaymentMethod {
     public int getId() {
         return id;
     }
-
 }

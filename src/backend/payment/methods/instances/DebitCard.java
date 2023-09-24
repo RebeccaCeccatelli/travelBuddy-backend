@@ -7,28 +7,29 @@ import java.util.Map;
 public class DebitCard extends PaymentMethod {
 
     @Override
-    protected boolean setInformation(String... information) {
+    protected boolean setMethodSpecificInfo(Object... methodSpecificInfo) {
         return false;
     }
 
     @Override
-    protected int saveInDB() {
+    protected int save() {
         return 0;
     }
 
 
+    @SafeVarargs
     @Override
-    protected boolean modifyInfo(Map<String, String>... modifications) {
+    protected final boolean modifyMethodSpecificInfo(Map<String, String>... modifications) {
         return false;
     }
 
     @Override
-    protected boolean updateDB() {
+    protected boolean update() {
         return false;
     }
 
     @Override
-    protected boolean deleteFromDB() {
+    protected boolean delete() {
         return false;
     }
 }

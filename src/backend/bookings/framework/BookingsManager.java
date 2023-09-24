@@ -12,10 +12,10 @@ public abstract class BookingsManager {
     protected ArrayList<Booking> bookings = new ArrayList<>();
 
     public BookingsManager(int accountId) {
-        bookings = loadBookingsFromDatabase(accountId);
+        bookings = loadAllBookings(accountId);
     }
 
-    protected abstract ArrayList<Booking> loadBookingsFromDatabase(int accountId);
+    protected abstract ArrayList<Booking> loadAllBookings(int accountId);
 
     public boolean addBooking(String service, int userId, int providerId, Date date, Time arrivalTime,
                                        String optionalNotes,
