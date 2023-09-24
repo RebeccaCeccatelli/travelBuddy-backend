@@ -12,7 +12,8 @@ import java.util.Objects;
 
 public abstract class BookingDao extends Dao {
 
-    public int save(int userId, int providerId, Date date, Time arrivalTime, String optionalNotes, BookingStatus status, Object... serviceSpecificInfo) {
+    public int save(int userId, int providerId, Date date, Time arrivalTime, String optionalNotes,
+                    BookingStatus status, Object... serviceSpecificInfo) {
         int id = saveGeneralInfo(userId, providerId, date, arrivalTime, optionalNotes, status);
         if (id != 0) {
             saveServiceSpecificInfo(id, serviceSpecificInfo);
@@ -189,5 +190,7 @@ public abstract class BookingDao extends Dao {
         }
         else return null;
     }
+
+    public abstract Object loadServiceSpecificInfo(int bookingId);
 
 }

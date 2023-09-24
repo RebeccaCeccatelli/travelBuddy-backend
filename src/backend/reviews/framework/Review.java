@@ -1,47 +1,56 @@
 package backend.reviews.framework;
 
+import java.util.Map;
+
 public abstract class Review {
+    protected int id;
+
     protected int bookingId;
-    protected int userId;
     protected String reviewText;
-    protected double rating;
+    protected Double rating;
 
-    public abstract String getServiceReviewed();
+    public void initialize(int id, int bookingId, String reviewText, Double rating, Object... serviceSpecificInfo) {
+        if (id != 0) {
+            setId(id);
+            setInfo(bookingId, reviewText, rating, serviceSpecificInfo);
+        }
+    }
 
-    public boolean create(int bookingId, String reviewText, double rating, Object... serviceSpecificInformation) {
+    public boolean create(int bookingId, String reviewText, Double rating, Object... serviceSpecificInfo) {
         boolean created = false;
-        if (setGeneralInformation(bookingId, reviewText, rating)) {
-            if (setServiceSpecificInformation(serviceSpecificInformation)) {
-               int id = saveGeneralInformationInDB();
-               if (id != 0) {
-                   if (saveServiceSpecificInformationInDB()) {
-                       created = true;
-                   }
-               }
-            }
+        if (setInfo(bookingId, reviewText, rating, serviceSpecificInfo)) {
+           int id = save();
+           if (id != 0) {
+               setId(id);
+               created = true;
+           }
         }
         return created;
     }
 
-    public boolean cancel() {
-        boolean cancelled = false;
-        if (cancelServiceSpecificInformationFromDB()) {
-            if (cancelGeneralInformationFromDB()) {
-                cancelled = true;
+    public boolean remove() {
+        boolean removed = false;
+        if (delete()) {
+            removed = true;
+        }
+        return removed;
+    }
+
+    private void setId(int id) {
+        this.id = id;
+    }
+
+    private boolean setInfo(int bookingId, String reviewText, Double rating, Object... serviceSpecificInfo) {
+        boolean set = false;
+        if (setGeneralInfo(bookingId, reviewText, rating)) {
+            if (setServiceSpecificInfo(serviceSpecificInfo)) {
+                set = true;
             }
         }
-        return cancelled;
+        return set;
     }
 
-    protected abstract boolean cancelServiceSpecificInformationFromDB();
-
-    private boolean cancelGeneralInformationFromDB() {
-        boolean cancelled = false;
-        //TODO cancel basic information from database (using id)
-        return cancelled;
-    }
-
-    private boolean setGeneralInformation(int bookingId, String reviewText, double rating) {
+    private boolean setGeneralInfo(int bookingId, String reviewText, double rating) {
         boolean valid = false;
         this.bookingId = bookingId;
         this.reviewText = reviewText;
@@ -51,8 +60,6 @@ public abstract class Review {
         }
         return valid;
     }
-
-    protected abstract boolean setServiceSpecificInformation(Object... serviceSpecificInformation);
 
     protected boolean isRatingValid(double rating) {
         boolean valid = false;
@@ -65,13 +72,11 @@ public abstract class Review {
         return valid;
     }
 
-    private int saveGeneralInformationInDB() {
-        int id = 0;
-        //TODO add to database (using id)
-        return id;
-    }
+    protected abstract boolean setServiceSpecificInfo(Object... serviceSpecificInformation);
 
-    protected abstract boolean saveServiceSpecificInformationInDB();
+    protected abstract int save();
 
+    protected abstract boolean delete();
 
+    public abstract String getServiceReviewed();
 }

@@ -1,16 +1,17 @@
 package backend.reviews.instances.review;
 
 import backend.reviews.framework.Review;
+import dao.reviews.instances.ToiletReviewDao;
 
 public class ToiletReview extends Review {
-    double cleanliness;
-    double offeredProductsQuality;
-    double bathroomSize;
-    double quietness;
-    double accessibility;
+    Double cleanliness;
+    Double offeredProductsQuality;
+    Double bathroomSize;
+    Double quietness;
+    Double accessibility;
 
     @Override
-    protected boolean setServiceSpecificInformation(Object... serviceSpecificInformation) {
+    protected boolean setServiceSpecificInfo(Object... serviceSpecificInformation) {
         boolean valid = false;
         if (serviceSpecificInformation != null && serviceSpecificInformation.length > 0) {
             rating = (Double) serviceSpecificInformation[0];
@@ -38,23 +39,18 @@ public class ToiletReview extends Review {
     }
 
     @Override
-    protected boolean saveServiceSpecificInformationInDB() {
-        boolean saved = false;
-        //TODO add to database
-        return saved;
+    protected int save() {
+        return new ToiletReviewDao().save(bookingId, reviewText, rating, cleanliness,
+                offeredProductsQuality, bathroomSize, quietness, accessibility);
     }
 
+    @Override
+    protected boolean delete() {
+        return new ToiletReviewDao().remove(id);
+    }
 
     @Override
     public String getServiceReviewed() {
         return "Toilet";
     }
-
-    @Override
-    protected boolean cancelServiceSpecificInformationFromDB() {
-        boolean cancelled = false;
-        //TODO cancel service specific information from database
-        return cancelled;
-    }
-
 }

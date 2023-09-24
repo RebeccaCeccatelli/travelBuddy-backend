@@ -12,11 +12,11 @@ public abstract class ReviewsManager {
     BookingsManager bookingsManager;
 
     public ReviewsManager(int accountId, BookingsManager bookingsManager) {
-        loadReviewsFromDatabase(accountId);
+        reviews = loadAllReviews(accountId);
         this.bookingsManager = bookingsManager;
     }
 
-    protected abstract void loadReviewsFromDatabase(int accountId);
+    protected abstract ArrayList<Review> loadAllReviews(int accountId);
 
     public boolean addReview(int bookingId, String reviewText, double rating,
                              Object... serviceSpecificInformation) {
@@ -55,16 +55,16 @@ public abstract class ReviewsManager {
         return created;
     }
 
-    public boolean cancelReview(int bookingId) {
-        boolean cancelled = false;
+    public boolean removeReview(int bookingId) {
+        boolean removed = false;
         Review review = findReviewByBookingId(bookingId);
         if (review != null) {
-            if (review.cancel()) {
+            if (review.remove()) {
                 reviews.remove(review);
-                cancelled = true;
+                removed = true;
             }
         }
-        return cancelled;
+        return removed;
     }
 
     public ArrayList<Review> getReviews() {

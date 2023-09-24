@@ -17,4 +17,9 @@ public class AccomodationBookingDao extends BookingDao {
     protected boolean updateServiceSpecificInfo(int bookingId, Object... serviceSpecificInfo) {
         return false;
     }
+
+    @Override
+    public Object loadServiceSpecificInfo(int bookingId) {
+        return null;
+    }
 }

@@ -9,17 +9,17 @@ public class TouristicAttractionReview extends Review {
     }
 
     @Override
-    protected boolean cancelServiceSpecificInformationFromDB() {
+    protected boolean setServiceSpecificInfo(Object... serviceSpecificInformation) {
         return false;
     }
 
     @Override
-    protected boolean setServiceSpecificInformation(Object... serviceSpecificInformation) {
-        return false;
+    protected int save() {
+        return 0;
     }
 
     @Override
-    protected boolean saveServiceSpecificInformationInDB() {
+    protected boolean delete() {
         return false;
     }
 }

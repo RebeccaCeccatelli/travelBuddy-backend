@@ -25,6 +25,7 @@ public class ToiletBookingDao extends BookingDao {
         }
     }
 
+    @Override
     public Time loadServiceSpecificInfo(int bookingId) {
         Time endTime = null;
 

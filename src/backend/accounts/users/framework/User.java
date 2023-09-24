@@ -86,7 +86,7 @@ public class User {
     }
 
     public boolean removeReview(int bookingId) {
-        return reviewsManager.cancelReview(bookingId);
+        return reviewsManager.removeReview(bookingId);
     }
 
     public ArrayList<Booking> getBookings() {
