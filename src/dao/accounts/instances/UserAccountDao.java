@@ -1,18 +1,18 @@
-package dao.accounts.users;
+package dao.accounts.instances;
 
 import backend.accounts.common.features.framework.Address;
 import backend.accounts.common.features.instances.UserAccount;
-import dao.accounts.AccountDao;
-import dao.accounts.AddressDao;
+import dao.accounts.framework.AccountDao;
+import dao.accounts.framework.AddressDao;
 
 import java.sql.*;
 
-public class UserDao extends AccountDao {
+public class UserAccountDao extends AccountDao {
 
     @Override
-    public UserAccount loadAccount(String email) {
+    public UserAccount load(String email) {
         UserAccount userAccount = null;
-        String query = "SELECT * FROM " + getTable() + " WHERE email = ?";
+        String query = "SELECT * FROM " + getTableName() + " WHERE email = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -26,7 +26,7 @@ public class UserDao extends AccountDao {
                 String password = resultSet.getString("password");
 
                 int addressId = resultSet.getInt("addressId");
-                Address address = new AddressDao("User").loadAddress(addressId);
+                Address address = new AddressDao("User").load(addressId);
 
                 String phoneNumber = resultSet.getString("phoneNumber");
 
@@ -45,12 +45,12 @@ public class UserDao extends AccountDao {
     }
 
     @Override
-    public void saveSpecificAccountInformation(int id, Object... memberSpecificInformation) {
+    public void saveAccountSpecificInfo(int id, Object... memberSpecificInformation) {
         String gender = (String) memberSpecificInformation[0];
         Date dateOfBirth = (Date) memberSpecificInformation[1];
         String nationality = (String) memberSpecificInformation[2];
 
-        String updateQuery = "UPDATE " + getTable() +
+        String updateQuery = "UPDATE " + getTableName() +
                 " SET gender = ?, dateOfBirth = ?, nationality = ? WHERE id = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);

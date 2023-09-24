@@ -1,4 +1,4 @@
-package dao.accounts;
+package dao.accounts.framework;
 
 import backend.accounts.common.features.framework.Address;
 import dao.Dao;
@@ -13,11 +13,11 @@ public class AddressDao extends Dao {
         this.accountType = accountType;
     }
 
-    public int saveAddress(Address address) {
+    public int save(Address address) {
         int id = 0;
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String insertQuery = "INSERT INTO " + getTable() +
+            String insertQuery = "INSERT INTO " + getTableName() +
                     "(street, civicNumber, postCode, city, country) VALUES (?, ?, ?, ?, ?)" +
                     "RETURNING id";
 
@@ -40,9 +40,9 @@ public class AddressDao extends Dao {
         return id;
     }
 
-    public Address loadAddress(int addressId) {
+    public Address load(int addressId) {
         Address address = null;
-        String query = "SELECT * FROM" + getTable() + " WHERE id = ?";
+        String query = "SELECT * FROM" + getTableName() + " WHERE id = ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -66,7 +66,7 @@ public class AddressDao extends Dao {
         return address;
     }
 
-    private String getTable() {
+    private String getTableName() {
         return "\"" + accountType + "\".\"" + accountType + "Address\"";
     }
 

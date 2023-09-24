@@ -24,16 +24,20 @@ public class Provider {
     protected BookingsManager bookingsManager;
     protected ReviewsManager reviewsManager;
 
-    public void initialize(int id, String email, String password, String name, Address address,
-                           String phoneNumber, Object... memberSpecificInformation) {
-        account.initialize(id, email, password, name, address, phoneNumber, memberSpecificInformation);
-        setManagers();
+    public boolean initialize(int id, String email, String password, String name, Address address,
+                           String phoneNumber, Object... accountSpecificInfo) {
+        boolean initialized = false;
+        if (account.initialize(id, email, password, name, address, phoneNumber, accountSpecificInfo)) {
+            setManagers();
+            initialized = true;
+        }
+        return initialized;
     }
 
     public boolean register(String email, String password, String name, Address address,
-                            String phoneNumber, Object... memberSpecificInformation) {
+                            String phoneNumber, Object... accountSpecificInfo) {
         boolean registered = false;
-        account = account.register(email, password, name, address, phoneNumber, memberSpecificInformation);
+        account = account.register(email, password, name, address, phoneNumber, accountSpecificInfo);
         if (account != null) {
             setManagers();
             registered = true;
@@ -51,12 +55,6 @@ public class Provider {
         return loggedIn;
     }
 
-    private void setManagers() {
-        servicesManager = new ProviderServicesManager(account.getId());
-        bookingsManager = new ProviderBookingsManager(account.getId());
-        reviewsManager = new ProviderReviewsManager(account.getId(), bookingsManager);
-    }
-
     public boolean addService(String service, Time openingTime, Time closingTime, String paymentPolicy,
                               double price, String optionalNotes,
                               Object... serviceSpecificInformation) {
@@ -64,24 +62,24 @@ public class Provider {
                 price, optionalNotes, serviceSpecificInformation);
     }
 
-    public boolean modifyServiceInformation(String service, Map<String, Object> modifications) {
-        return servicesManager.modifyServiceInformation(service, modifications);
-    }
-
     public boolean cancelService(String service) {
         return servicesManager.cancelService(service);
+    }
+
+    public boolean modifyServiceInformation(String service, Map<String, Object> modifications) {
+        return servicesManager.modifyServiceInformation(service, modifications);
     }
 
     public boolean updateServiceStatus(String service, ServiceStatus newStatus) {
         return servicesManager.updateServiceStatus(service, newStatus);
     }
 
-    public boolean cancelBooking(int bookingId) {
-        return bookingsManager.cancelBooking(bookingId);
-    }
-
     public boolean confirmBookingAttendance(int bookingId) {
         return bookingsManager.confirmBookingAttendance(bookingId);
+    }
+
+    public boolean cancelBooking(int bookingId) {
+        return bookingsManager.removeBooking(bookingId);
     }
 
     public ArrayList<Booking> getBookings() {
@@ -100,7 +98,7 @@ public class Provider {
         return servicesManager.getServiceByType(service);
     }
 
-    public double getProviderRating() {
+    public double getOverallRating() {
         return reviewsManager.calculateAverageRating();
     }
 
@@ -108,14 +106,13 @@ public class Provider {
         return reviewsManager.calculateAverageRating(service);
     }
 
-
-    public static int findProviderIdByNameAndAddress(String providerName, String address) {
-        int providerId = 0;
-        //TODO search providerId in database using name and address
-        return providerId;
-    }
-
     public Address getAddress() {
         return account.getAddress();
+    }
+
+    private void setManagers() {
+        servicesManager = new ProviderServicesManager(account.getId());
+        bookingsManager = new ProviderBookingsManager(account.getId());
+        reviewsManager = new ProviderReviewsManager(account.getId(), bookingsManager);
     }
 }

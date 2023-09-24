@@ -2,7 +2,7 @@ package backend.bookings.instances.manager;
 
 import backend.bookings.framework.Booking;
 import backend.bookings.framework.BookingsManager;
-import dao.bookings.BookingDao;
+import dao.bookings.framework.BookingDao;
 
 import java.util.ArrayList;
 
@@ -13,6 +13,6 @@ public class ProviderBookingsManager extends BookingsManager {
 
     @Override
     protected ArrayList<Booking> loadBookingsFromDatabase(int accountId) {
-        return new BookingDao().loadAllBookings(accountId, "Provider");
+        return BookingDao.loadAllBookings(accountId, "Provider");
     }
 }

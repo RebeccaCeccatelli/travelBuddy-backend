@@ -1,7 +1,7 @@
 package backend.accounts.common.features.instances;
 
 import backend.accounts.common.features.framework.Account;
-import dao.accounts.users.UserDao;
+import dao.accounts.instances.UserAccountDao;
 
 import java.sql.Date;
 import java.util.Objects;
@@ -12,28 +12,28 @@ public class UserAccount extends Account {
     public String nationality;
 
     @Override
-    protected boolean checkAccountExists(String email) {
-        return new UserDao().checkAccountExists(email);
-    }
-
-    @Override
-    protected boolean checkPasswordsMatch(String email, String password) {
-        return new UserDao().checkPasswordsMatch(email, password);
-    }
-
-    @Override
-    protected UserAccount load() {
-        return new UserDao().loadAccount(email);
-    }
-
-    @Override
     public int save() {
-        return new UserDao().saveAccount(name, email, password, address, phoneNumber,
+        return new UserAccountDao().save(name, email, password, address, phoneNumber,
                 gender, dateOfBirth, nationality);
     }
 
     @Override
-    protected boolean setAccountSpecificInformation(Object... memberSpecificInformation) {
+    protected UserAccount load() {
+        return new UserAccountDao().load(email);
+    }
+
+    @Override
+    protected boolean checkAccountExists(String email) {
+        return new UserAccountDao().checkAccountExists(email);
+    }
+
+    @Override
+    protected boolean checkPasswordsMatch(String email, String password) {
+        return new UserAccountDao().checkPasswordsMatch(email, password);
+    }
+
+    @Override
+    protected boolean setAccountSpecificInfo(Object... memberSpecificInformation) {
         boolean valid = false;
         String gender = (String) memberSpecificInformation[0];
         if (isGenderValid(gender)) {
@@ -51,7 +51,7 @@ public class UserAccount extends Account {
     }
 
     private boolean isGenderValid(String gender) {
-        return Objects.equals(gender, "female") || Objects.equals(gender, "male");
+        return Objects.equals(gender, "Female") || Objects.equals(gender, "Male");
     }
 
     private boolean isDateOfBirthValid(Date date) {
@@ -70,5 +70,4 @@ public class UserAccount extends Account {
 
         return ageInYears >= 18 && ageInYears <= 100;
     }
-
 }

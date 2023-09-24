@@ -49,7 +49,6 @@ public abstract class BookingsManager {
         if (created) {
             bookings.add(booking);
         }
-
         return created;
     }
 
@@ -64,16 +63,16 @@ public abstract class BookingsManager {
         return modified;
     }
 
-    public boolean cancelBooking(int bookingId) {
-        boolean cancelled = false;
+    public boolean removeBooking(int bookingId) {
+        boolean removed = false;
         Booking booking  = findBookingById(bookingId);
         if (booking != null) {
-            if (booking.cancel()) {
+            if (booking.remove()) {
                 bookings.remove(booking);
-                cancelled = true;
+                removed = true;
             }
         }
-        return cancelled;
+        return removed;
     }
 
     public boolean confirmBookingAttendance(int bookingId) {
@@ -81,7 +80,9 @@ public abstract class BookingsManager {
         Booking booking = findBookingById(bookingId);
         if (booking != null) {
             booking.setStatus(BookingStatus.SUCCESSFUL);
-            confirmed = true;
+            if (booking.update()) {
+                confirmed = true;
+            }
         }
         return confirmed;
     }

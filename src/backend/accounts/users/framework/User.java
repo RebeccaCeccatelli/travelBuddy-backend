@@ -23,15 +23,6 @@ public class User {
     protected ReviewsManager reviewsManager;
     protected PaymentMethodsManager paymentMethodsManager;
 
-    public ProvidersMap createMap(String service) {
-        ProvidersMap map = new ProvidersMap();
-
-        map.locateUser(this);
-        map.populate(service);
-
-        return map;
-    }
-
     public boolean register(String email, String password, String name, Address address,
                             String phoneNumber, Object... memberSpecificInformation) {
         boolean registered = false;
@@ -53,22 +44,25 @@ public class User {
         return loggedIn;
     }
 
-    private void setManagers() {
-        bookingsManager = new UserBookingsManager(account.getId());
-        reviewsManager = new UserReviewsManager(account.getId(), bookingsManager);
-        paymentMethodsManager = new PaymentMethodsManager(account.getId());
+    public ProvidersMap createMap(String service) {
+        ProvidersMap map = new ProvidersMap();
+
+        map.locateUser(this);
+        map.populate(service);
+
+        return map;
     }
 
     public boolean addPaymentMethod(String type, String... information) {
         return paymentMethodsManager.addPaymentMethod(type, information);
     }
 
-    public boolean modifyPaymentMethod(int paymentMethodId, Map<String, String> modifications) {
-        return paymentMethodsManager.modifyPaymentMethod(paymentMethodId, modifications);
-    }
-
     public boolean removePaymentMethod(int paymentMethodId) {
         return paymentMethodsManager.removePaymentMethod(paymentMethodId);
+    }
+
+    public boolean modifyPaymentMethod(int paymentMethodId, Map<String, String> modifications) {
+        return paymentMethodsManager.modifyPaymentMethod(paymentMethodId, modifications);
     }
 
     public boolean addBooking(String service, int providerId, Date date, Time arrivalTime,
@@ -82,12 +76,8 @@ public class User {
         return bookingsManager.modifyBooking(bookingId, modifications);
     }
 
-    public boolean cancelBooking(int bookingId) {
-        return bookingsManager.cancelBooking(bookingId);
-    }
-
-    public ArrayList<Booking> getBookings() {
-        return bookingsManager.getBookings();
+    public boolean removeBooking(int bookingId) {
+        return bookingsManager.removeBooking(bookingId);
     }
 
     public boolean addReview(int bookingId, String reviewText, double rating,
@@ -95,20 +85,33 @@ public class User {
         return reviewsManager.addReview(bookingId, reviewText, rating, serviceSpecificInformation);
     }
 
-    public boolean cancelReview(int bookingId) {
+    public boolean removeReview(int bookingId) {
         return reviewsManager.cancelReview(bookingId);
+    }
+
+    public ArrayList<Booking> getBookings() {
+        return bookingsManager.getBookings();
     }
 
     public ArrayList<Review> getReviews() {
         return reviewsManager.getReviews();
     }
 
-    public String getUserMessage() {
-        return "Hi, " + account.getName() + "! You are here.";
+    public ArrayList<PaymentMethod> getPaymentMethods() {
+        return paymentMethodsManager.getPaymentMethods();
+    }
+
+    public String getName() {
+        return account.getName();
     }
 
     public Address getAddress() {
         return account.getAddress();
     }
 
+    private void setManagers() {
+        bookingsManager = new UserBookingsManager(account.getId());
+        reviewsManager = new UserReviewsManager(account.getId(), bookingsManager);
+        paymentMethodsManager = new PaymentMethodsManager(account.getId());
+    }
 }

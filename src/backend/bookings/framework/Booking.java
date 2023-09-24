@@ -1,7 +1,5 @@
 package backend.bookings.framework;
 
-import dao.bookings.BookingDao;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Map;
@@ -13,101 +11,99 @@ public abstract class Booking {
     protected Date date;
     protected Time arrivalTime;
     protected String optionalNotes;
-    BookingStatus status = BookingStatus.INCOMPLETE;
+    protected BookingStatus status = BookingStatus.INCOMPLETE;
 
-    public void initialize(int id, int userId, int providerId, Date date, Time arrivalTime, String optionalNotes, BookingStatus status, Object... serviceSpecificInformation) {
-        setId(id);
-        if (setGeneralInformation(userId, providerId, date, arrivalTime, optionalNotes)) {
+    public void initialize(int id, int userId, int providerId, Date date, Time arrivalTime, String optionalNotes,
+                           BookingStatus status, Object... serviceSpecificInfo) {
+        if (id != 0) {
+            setId(id);
+        }
+        if (setInfo(userId, providerId, date, arrivalTime, optionalNotes, serviceSpecificInfo)) {
             setStatus(status);
-            setServiceSpecificInformation(serviceSpecificInformation);
         }
     }
 
-    public boolean create(int userId, int providerId, Date date, Time arrivalTime,
-                          String optionalNotes,
+    public boolean create(int userId, int providerId, Date date, Time arrivalTime, String optionalNotes,
                           Object... serviceSpecificInformation) {
         boolean created = false;
-        if (setGeneralInformation(userId, providerId, date, arrivalTime, optionalNotes)) {
-            if(setServiceSpecificInformation(serviceSpecificInformation)) {
-                int id = saveGeneralInformationInDB();
-                if(id != 0) {
+
+        if (setInfo(userId, providerId, date, arrivalTime, optionalNotes, serviceSpecificInformation)) {
+            setStatus(BookingStatus.FUTURE);
+            int id = save();
+            if (id != 0) {
                     setId(id);
-                    if (saveServiceSpecificInformationInDB()) {
-                        setId(id);
-                        created = true;
-                        setStatus(BookingStatus.FUTURE);
-                    }
-                }
+                    created = true;
             }
         }
         return created;
     }
 
-    public boolean cancel() {
-        boolean cancelled = false;
-        if (cancelServiceSpecificInformationFromDB()) {
-            if (cancelGeneralInformationFromDB()) {
-                setStatus(BookingStatus.CANCELLED);
-                cancelled = true;
-            }
+    public boolean remove() {
+        boolean removed = false;
+        if (delete()) {
+            setStatus(BookingStatus.CANCELLED);
+            removed = true;
         }
-        return cancelled;
+        return removed;
     }
 
     public boolean modify(Map<String, Object> modifications) {
         boolean modified = false;
-        if (modifyGeneralInformation(modifications)) {
-            if (updateGeneralInformationInDB()) {
+        if (modifyGeneralInfo(modifications)) {
                 modified = true;
-            }
         }
-        if (modifyServiceSpecificInformation(modifications)) {
-            if (updateServiceSpecificInformationInDB()) {
+        if (modifyServiceSpecificInfo(modifications)) {
                 modified = true;
-            }
+        }
+        if (!update()) {
+            modified = false;
         }
         return modified;
     }
 
-    private boolean setGeneralInformation(int userId, int providerId, Date date, Time arrivalTime,
-                                          String optionalNotes) {
-        boolean valid = false;
-        this.userId = userId;
-        this.providerId = providerId;
-        if (isDateValid(date)) {
-            this.date = date;
-            if (isArrivalTimeValid(arrivalTime)) {
-                this.arrivalTime = arrivalTime;
-                valid = true;
+    protected abstract int save();
+
+    protected abstract boolean delete();
+
+    public abstract boolean update();
+
+    private boolean setInfo(int userId, int providerId, Date date, Time arrivalTime, String optionalNotes,
+                            Object... serviceSecificInfo) {
+        boolean set = false;
+        if (setGeneralInfo(userId, providerId, date, arrivalTime, optionalNotes)) {
+            if (setServiceSpecificInfo(serviceSecificInfo)) {
+                set = true;
             }
         }
+        return set;
+    }
 
-        this.optionalNotes = optionalNotes;
+    private boolean setGeneralInfo(int userId, int providerId, Date date, Time arrivalTime,
+                                   String optionalNotes) {
+        boolean valid = false;
+        if (userId != 0) {
+            this. userId = userId;
+
+            if (providerId != 0) {
+                this.providerId = providerId;
+
+                if (isDateValid(date)) {
+                    this.date = date;
+
+                    if (isArrivalTimeValid(arrivalTime)) {
+                        this.arrivalTime = arrivalTime;
+
+                        this.optionalNotes = optionalNotes;}
+                        valid = true;
+                    }
+                }
+        }
         return valid;
     }
 
-    private int saveGeneralInformationInDB() {
-        return new BookingDao().saveGeneralBookingInformation(userId, providerId, date, arrivalTime, optionalNotes, status);
-    }
+    protected abstract boolean setServiceSpecificInfo(Object... serviceSpecificInformation);
 
-    protected abstract boolean setServiceSpecificInformation(Object... serviceSpecificInformation);
-
-
-    protected abstract boolean saveServiceSpecificInformationInDB();
-
-    private void setId(int id) {
-        this.id = id;
-    }
-
-    private boolean cancelGeneralInformationFromDB() {
-        boolean cancelled = false;
-        //TODO cancel basic information from database (using id)
-        return cancelled;
-    }
-
-    protected abstract boolean cancelServiceSpecificInformationFromDB();
-
-    private boolean modifyGeneralInformation(Map<String, Object> modifications) {
+    private boolean modifyGeneralInfo(Map<String, Object> modifications) {
         boolean modified = false;
 
         if (modifications.containsKey("date")) {
@@ -133,15 +129,19 @@ public abstract class Booking {
         return modified;
     }
 
-    protected abstract boolean modifyServiceSpecificInformation(Map<String, Object> modifications);
+    protected abstract boolean modifyServiceSpecificInfo(Map<String, Object> modifications);
 
-    private boolean updateGeneralInformationInDB() {
-        boolean updated = false;
-        //TODO modify information in database
-        return updated;
+    private void setId(int id) {
+        this.id = id;
     }
 
-    protected  abstract  boolean updateServiceSpecificInformationInDB();
+    public void setStatus(BookingStatus newStatus) {
+        this.status = newStatus;
+    }
+
+    protected boolean isSuccessful() {
+        return this.status == BookingStatus.SUCCESSFUL;
+    }
 
     private boolean isDateValid(Date date) {
         boolean valid = true;
@@ -153,14 +153,6 @@ public abstract class Booking {
         boolean valid = true;
         //TODO check time validity
         return valid;
-    }
-
-    public void setStatus(BookingStatus newStatus) {
-        this.status = newStatus;
-    }
-
-    boolean isSuccessful() {
-        return this.status == BookingStatus.SUCCESSFUL;
     }
 }
 

@@ -1,8 +1,7 @@
 package backend.bookings.instances.booking;
 
 import backend.bookings.framework.Booking;
-import dao.bookings.BookingDao;
-import dao.bookings.ToiletBookingDao;
+import dao.bookings.instances.ToiletBookingDao;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -12,9 +11,21 @@ import java.util.Map;
 public class ToiletBooking extends Booking {
     Time endTime;
 
+    public int save() {
+        return new ToiletBookingDao().save(userId, providerId, date, arrivalTime, optionalNotes, status, endTime);
+    }
+
+    public boolean delete() {
+        return new ToiletBookingDao().remove(id);
+    }
 
     @Override
-    protected boolean setServiceSpecificInformation(Object... serviceSpecificInformation) {
+    public boolean update() {
+        return new ToiletBookingDao().update(id, userId, providerId, date, arrivalTime, optionalNotes, status, endTime);
+    }
+
+    @Override
+    protected boolean setServiceSpecificInfo(Object... serviceSpecificInformation) {
         boolean valid = false;
         if (serviceSpecificInformation != null && serviceSpecificInformation.length > 0) {
             Time time = (Time) serviceSpecificInformation[0];
@@ -27,25 +38,7 @@ public class ToiletBooking extends Booking {
     }
 
     @Override
-    protected boolean saveServiceSpecificInformationInDB() {
-        boolean saved = false;
-        if (new BookingDao().saveServiceType(id, "Toilet")) {
-            if (new ToiletBookingDao().saveSpecificInformation(id, endTime)) {
-                saved = true;
-            }
-        }
-        return saved;
-    }
-
-    @Override
-    protected boolean cancelServiceSpecificInformationFromDB() {
-        boolean cancelled = false;
-        //TODO cancel service specific information from database (using id)
-        return cancelled;
-    }
-
-    @Override
-    protected boolean modifyServiceSpecificInformation(Map<String, Object> modifications) {
+    protected boolean modifyServiceSpecificInfo(Map<String, Object> modifications) {
         boolean modified = false;
         if (modifications.containsKey("endTime")) {
             Time time = (Time) modifications.get("endTime");
@@ -54,13 +47,6 @@ public class ToiletBooking extends Booking {
                 modified = true;
             }
         }
-        return modified;
-    }
-
-    @Override
-    protected boolean updateServiceSpecificInformationInDB() {
-        boolean modified = false;
-        //TODO modify information in database
         return modified;
     }
 

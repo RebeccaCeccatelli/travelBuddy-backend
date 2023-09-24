@@ -1,6 +1,6 @@
 package backend.accounts.providers.framework;
 
-import dao.accounts.providers.ProviderDao;
+import dao.accounts.instances.ProviderAccountDao;
 
 import java.util.ArrayList;
 
@@ -8,10 +8,14 @@ public class ProvidersManager {
     ArrayList<Provider> providers = new ArrayList<>();
 
     public ProvidersManager() {
-        loadAllProviders();
+        providers = loadAllProviders();
     }
 
-    public ArrayList<Provider> getProvidersByService(String service) {
+    private ArrayList<Provider> loadAllProviders() {
+        return new ProviderAccountDao().loadAllProviders();
+    }
+
+    public ArrayList<Provider> getServiceProviders(String service) {
         ArrayList<Provider> serviceProviders = new ArrayList<>();
         if (providers != null) {
             for (Provider provider : providers) {
@@ -23,9 +27,7 @@ public class ProvidersManager {
         return serviceProviders;
     }
 
-    private void loadAllProviders() {
-        providers = new ProviderDao().loadAllProviders();
-    }
+
 
 
 }

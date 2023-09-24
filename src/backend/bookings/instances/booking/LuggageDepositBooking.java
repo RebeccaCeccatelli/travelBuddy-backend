@@ -6,27 +6,27 @@ import java.util.Map;
 
 public class LuggageDepositBooking extends Booking {
     @Override
-    protected boolean setServiceSpecificInformation(Object... serviceSpecificInformation) {
+    public int save() {
+        return 0;
+    }
+
+    @Override
+    public boolean delete() {
         return false;
     }
 
     @Override
-    protected boolean saveServiceSpecificInformationInDB() {
+    public boolean update() {
         return false;
     }
 
     @Override
-    protected boolean cancelServiceSpecificInformationFromDB() {
+    protected boolean setServiceSpecificInfo(Object... serviceSpecificInformation) {
         return false;
     }
 
     @Override
-    protected boolean modifyServiceSpecificInformation(Map<String, Object> modifications) {
-        return false;
-    }
-
-    @Override
-    protected boolean updateServiceSpecificInformationInDB() {
+    protected boolean modifyServiceSpecificInfo(Map<String, Object> modifications) {
         return false;
     }
 }

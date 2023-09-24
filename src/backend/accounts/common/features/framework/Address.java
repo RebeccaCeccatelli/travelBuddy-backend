@@ -48,8 +48,4 @@ public class Address{
     public String getCountry() {
         return country;
     }
-
-    public String getAddressAsString() {
-        return street + " " + civicNumber + ", " + postCode + " " + city + ", " + country;
-    }
 }

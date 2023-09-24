@@ -1,35 +1,35 @@
 package backend.accounts.common.features.instances;
 
 import backend.accounts.common.features.framework.Account;
-import dao.accounts.providers.ProviderDao;
+import dao.accounts.instances.ProviderAccountDao;
 
 public class ProviderAccount extends Account {
     public String licenseId;
     public String businessId;
 
     @Override
-    protected boolean checkAccountExists(String email) {
-        return new ProviderDao().checkAccountExists(email);
-    }
-
-    @Override
-    protected boolean checkPasswordsMatch(String email, String password) {
-        return new ProviderDao().checkPasswordsMatch(email, password);
-    }
-
-    @Override
-    protected ProviderAccount load() {
-        return new ProviderDao().loadAccount(email);
-    }
-
-    @Override
     public int save() {
-        return new ProviderDao().saveAccount(name, email, password, address, phoneNumber,
+        return new ProviderAccountDao().save(name, email, password, address, phoneNumber,
                 licenseId, businessId);
     }
 
     @Override
-    protected boolean setAccountSpecificInformation(Object... memberSpecificInformation) {
+    protected ProviderAccount load() {
+        return new ProviderAccountDao().load(email);
+    }
+
+    @Override
+    protected boolean checkAccountExists(String email) {
+        return new ProviderAccountDao().checkAccountExists(email);
+    }
+
+    @Override
+    protected boolean checkPasswordsMatch(String email, String password) {
+        return new ProviderAccountDao().checkPasswordsMatch(email, password);
+    }
+
+    @Override
+    protected boolean setAccountSpecificInfo(Object... memberSpecificInformation) {
         boolean valid = false;
         String licenseId = (String) memberSpecificInformation[0];
         if (isLicenseIdValid(licenseId)) {
@@ -46,10 +46,14 @@ public class ProviderAccount extends Account {
     }
 
     private boolean isLicenseIdValid(String licenseId) {
-        return true;
+        boolean valid = true;
+        //TODO to be implemented
+        return valid;
     }
 
     private boolean isBusinessIdValid(String businessId) {
-        return true;
+        boolean valid = true;
+        //TODO to be implemented
+        return valid;
     }
 }

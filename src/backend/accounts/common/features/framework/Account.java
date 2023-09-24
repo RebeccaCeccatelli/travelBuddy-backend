@@ -8,48 +8,72 @@ public abstract class Account {
     public String name;
     public String password;
     public String email;
+
     protected Address address;
     public String phoneNumber;
 
-    public void initialize(int id, String email, String password, String name, Address address, String phoneNumber, Object... additionalAccountInfo) {
-        setId(id);
-        if (setGeneralInformation(email, password, name, address, phoneNumber)) {
-            setAccountSpecificInformation(additionalAccountInfo);
-        }
-    }
+    public boolean initialize(int id, String email, String password, String name, Address address, String phoneNumber, Object... accountSpecificInfo) {
+        boolean initialized = false;
+        if (id != 0) {
+            setId(id);
 
-    public Account register(String email, String password, String name, Address address, String phoneNumber, Object... memberSpecificInformation) {
-        if (!checkAccountExists(email)) {
-            if (setGeneralInformation(email, password, name, address, phoneNumber)) {
-                if (setAccountSpecificInformation(memberSpecificInformation)) {
-                    int id = save();
-                    if (id != 0) {
-                        setId(id);
-                        return this;
-                    }
-                }
+            if (setInfo(email, password, name, address, phoneNumber, accountSpecificInfo)) {
+                initialized = true;
             }
         }
-        return null;
+        return initialized;
     }
 
     public Account login(String email, String password) {
+        Account account = null;
         if (checkAccountExists(email)) {
             this.email = email;
             if (checkPasswordsMatch(email, password)) {
                 this.password = password;
-
-                return load();
+                account = load();
             }
         }
-        return null;
+        return account;
     }
 
-    protected boolean setGeneralInformation(String email, String password, String name,
-                                     Address address, String phoneNumber) {
-        boolean valid = false;
-        this.name = name;
+    public Account register(String email, String password, String name, Address address, String phoneNumber,
+                            Object... accountSpecificInfo) {
+        Account account = null;
+        if (!checkAccountExists(email)) {
+            if (setInfo(email, password, name, address, phoneNumber, accountSpecificInfo)) {
+                int id = save();
+                if (id != 0) {
+                    setId(id);
+                    account = this;
+                }
+            }
+        }
+        return account;
+    }
 
+    protected abstract int save();
+
+    protected abstract Account load();
+
+    protected abstract boolean checkAccountExists(String email);
+
+    protected abstract boolean checkPasswordsMatch(String email, String password);
+
+
+    protected boolean setInfo(String email, String password, String name, Address address, String phoneNumber, Object... accountSpecificInfo) {
+        boolean set = false;
+        if (setGeneralInfo(email, password, name, address, phoneNumber)) {
+            if (setAccountSpecificInfo(accountSpecificInfo)) {
+                set = true;
+            }
+        }
+        return set;
+    }
+
+    private boolean setGeneralInfo(String email, String password,String name, Address address, String phoneNumber) {
+        boolean set = false;
+
+        this.name = name;
         if (isEmailValid(email)) {
             this.email = email;
 
@@ -62,14 +86,19 @@ public abstract class Account {
                     if (isPhoneNumberValid(phoneNumber)) {
                         this.phoneNumber = phoneNumber;
 
-                        valid = true;
+                        set = true;
                     }
                 }
             }
         }
-        return valid;
+        return set;
     }
 
+    protected abstract boolean setAccountSpecificInfo(Object... memberSpecificInformation);
+
+    private void setId(int id) {
+        this.id = id;
+    }
 
     private boolean isEmailValid(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
@@ -96,35 +125,18 @@ public abstract class Account {
     private boolean isPhoneNumberValid(String phoneNumber) {
         String numericPhoneNumber = phoneNumber.replaceAll("[^0-9]", "");
 
-        if (numericPhoneNumber.length() < 10) {
-            return false;
-        }
-        return true;
-    }
-
-    protected abstract boolean setAccountSpecificInformation(Object... memberSpecificInformation);
-
-    private void setId(int id) {
-        this.id = id;
+        return numericPhoneNumber.length() >= 10;
     }
 
     public int getId() {
         return id;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
     public String getName() {
         return name;
     }
 
-    protected abstract boolean checkAccountExists(String email);
-
-    protected abstract boolean checkPasswordsMatch(String email, String password);
-
-    protected abstract Account load();
-
-    protected abstract int save();
+    public Address getAddress() {
+        return address;
+    }
 }

@@ -13,7 +13,7 @@ public class ProvidersMap {
 
     public void locateUser(User user) {
         Coordinates coordinates = new Coordinates(user.getAddress());
-        String popupMessage = user.getUserMessage();
+        String popupMessage = "Hi, " + user.getName() + "! You are here.";
 
         this.user = new Marker(coordinates, popupMessage);
     }
@@ -21,7 +21,7 @@ public class ProvidersMap {
     public void populate(String serviceType) {
 
         ProvidersManager providersManager = new ProvidersManager();
-        ArrayList<Provider> providers = providersManager.getProvidersByService(serviceType);
+        ArrayList<Provider> providers = providersManager.getServiceProviders(serviceType);
         for (Provider provider : providers) {
             Coordinates coordinates = new Coordinates(provider.getAddress());
 

@@ -1,12 +1,7 @@
 import backend.accounts.common.features.framework.Address;
 import backend.accounts.users.framework.User;
-import backend.bookings.framework.Booking;
-import backend.bookings.framework.BookingsManager;
-import dao.bookings.BookingDao;
 
 import java.sql.Date;
-import java.sql.Time;
-import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
