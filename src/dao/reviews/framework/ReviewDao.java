@@ -56,14 +56,14 @@ public abstract class ReviewDao extends Dao {
                 int id = resultSet.getInt("id");
                 int bookingId = resultSet.getInt("bookingId");
                 String reviewText = resultSet.getString("reviewText");
-                double rating = resultSet.getDouble("rating");
+                Double rating = resultSet.getDouble("rating");
                 String service = resultSet.getString("service");
 
                 Review review = null;
                 if (Objects.equals(service, "Toilet")) {
                     review = new ToiletReview();
                     ArrayList<Double> toiletRatings = new ToiletReviewDao().loadServiceSpecificInfo(id);
-                    review.initialize(id, bookingId, reviewText, rating, toiletRatings);
+                    review.initialize(id, bookingId, reviewText, rating, toiletRatings.get(0), toiletRatings.get(1), toiletRatings.get(2), toiletRatings.get(3), toiletRatings.get(4));
                 }
                 else if (Objects.equals(service, "Wifi hotspot")) {
                     review = new WiFiHotspotReview();

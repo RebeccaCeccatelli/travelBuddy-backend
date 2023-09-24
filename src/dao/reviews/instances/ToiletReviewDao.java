@@ -56,11 +56,11 @@ public class ToiletReviewDao extends ReviewDao {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                double cleanliness = resultSet.getDouble("cleanliness");
-                double productsQuality = resultSet.getDouble("productsQuality");
-                double bathroomSize = resultSet.getDouble("bathroomSize");
-                double quietness = resultSet.getDouble("quietness");
-                double accessibility = resultSet.getDouble("accessibility");
+                Double cleanliness = resultSet.getDouble("cleanliness");
+                Double productsQuality = resultSet.getDouble("productsQuality");
+                Double bathroomSize = resultSet.getDouble("bathroomSize");
+                Double quietness = resultSet.getDouble("quietness");
+                Double accessibility = resultSet.getDouble("accessibility");
 
                 ratings.add(cleanliness);
                 ratings.add(productsQuality);

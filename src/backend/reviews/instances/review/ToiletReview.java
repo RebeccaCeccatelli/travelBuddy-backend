@@ -17,22 +17,28 @@ public class ToiletReview extends Review {
             Double cleanliness = (Double) serviceSpecificInformation[0];
             if (isRatingValid(cleanliness)) {
                 this.cleanliness = cleanliness;
-            }
-            Double productsQuality = (Double) serviceSpecificInformation[1];
-            if (isRatingValid(productsQuality)) {
-                this.productsQuality = productsQuality;
-            }
-            Double bathroomSize = (Double) serviceSpecificInformation[2];
-            if (isRatingValid(bathroomSize)) {
-                this.bathroomSize = bathroomSize;
-            }
-            Double quietness = (Double) serviceSpecificInformation[3];
-            if (isRatingValid(quietness)) {
-                this.quietness = quietness;
-            }
-            Double accessibility = (Double) serviceSpecificInformation[4];
-            if(isRatingValid(accessibility)) {
-                this.accessibility = accessibility;
+
+                Double productsQuality = (Double) serviceSpecificInformation[1];
+                if (isRatingValid(productsQuality)) {
+                    this.productsQuality = productsQuality;
+
+                    Double bathroomSize = (Double) serviceSpecificInformation[2];
+                    if (isRatingValid(bathroomSize)) {
+                        this.bathroomSize = bathroomSize;
+
+                        Double quietness = (Double) serviceSpecificInformation[3];
+                        if (isRatingValid(quietness)) {
+                            this.quietness = quietness;
+
+                            Double accessibility = (Double) serviceSpecificInformation[4];
+                            if(isRatingValid(accessibility)) {
+                                this.accessibility = accessibility;
+
+                                valid = true;
+                            }
+                        }
+                    }
+                }
             }
         }
         return valid;

@@ -135,6 +135,10 @@ public abstract class Booking {
         this.id = id;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void setStatus(BookingStatus newStatus) {
         this.status = newStatus;
     }

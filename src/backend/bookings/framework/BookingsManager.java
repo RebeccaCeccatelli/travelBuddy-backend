@@ -93,7 +93,7 @@ public abstract class BookingsManager {
 
     public Booking findBookingById(int bookingId) {
         for (Booking booking : bookings) {
-            if (booking.id == bookingId) {
+            if (booking.getId() == bookingId) {
                 return booking;
             }
         }

@@ -14,11 +14,6 @@ public class AccomodationReviewDao extends ReviewDao {
     }
 
     @Override
-    protected boolean updateServiceSpecificInfo(int reviewId, Object... serviceSpecificInfo) {
-        return false;
-    }
-
-    @Override
     protected Object loadServiceSpecificInfo(int reviewId) {
         return null;
     }
