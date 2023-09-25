@@ -1,6 +1,6 @@
 package backend.accounts.providers.framework;
 
-import dao.accounts.instances.ProviderAccountDao;
+import data.access.accounts.instances.ProviderAccountDao;
 
 import java.util.ArrayList;
 

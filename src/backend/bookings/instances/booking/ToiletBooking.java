@@ -1,7 +1,7 @@
 package backend.bookings.instances.booking;
 
 import backend.bookings.framework.Booking;
-import dao.bookings.instances.ToiletBookingDao;
+import data.access.bookings.instances.ToiletBookingDao;
 
 import java.sql.Date;
 import java.sql.Time;

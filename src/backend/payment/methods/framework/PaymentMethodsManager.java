@@ -1,7 +1,7 @@
 package backend.payment.methods.framework;
 
 import backend.payment.methods.instances.*;
-import dao.payment.methods.framework.PaymentMethodDao;
+import data.access.payment.methods.framework.PaymentMethodDao;
 
 import java.util.ArrayList;
 import java.util.Map;

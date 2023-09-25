@@ -2,7 +2,7 @@ package backend.bookings.instances.manager;
 
 import backend.bookings.framework.Booking;
 import backend.bookings.framework.BookingsManager;
-import dao.bookings.framework.BookingDao;
+import data.access.bookings.framework.BookingDao;
 
 import java.util.ArrayList;
 

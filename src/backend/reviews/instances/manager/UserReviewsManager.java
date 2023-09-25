@@ -1,9 +1,8 @@
 package backend.reviews.instances.manager;
 
 import backend.bookings.framework.BookingsManager;
-import backend.reviews.framework.Review;
 import backend.reviews.framework.ReviewsManager;
-import dao.reviews.framework.ReviewDao;
+import data.access.reviews.framework.ReviewDao;
 
 import java.util.ArrayList;
 

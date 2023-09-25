@@ -1,7 +1,7 @@
 package backend.reviews.instances.review;
 
 import backend.reviews.framework.Review;
-import dao.reviews.instances.ToiletReviewDao;
+import data.access.reviews.instances.ToiletReviewDao;
 
 public class ToiletReview extends Review {
     Double cleanliness;

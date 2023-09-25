@@ -2,7 +2,6 @@ package backend.reviews.framework;
 
 public abstract class Review {
     protected int id;
-
     protected int bookingId;
     protected String reviewText;
     protected Double rating;

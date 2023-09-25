@@ -1,7 +1,7 @@
 package backend.accounts.common.features.instances;
 
 import backend.accounts.common.features.framework.Account;
-import dao.accounts.instances.ProviderAccountDao;
+import data.access.accounts.instances.ProviderAccountDao;
 
 public class ProviderAccount extends Account {
     public String licenseId;

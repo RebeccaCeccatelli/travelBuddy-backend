@@ -1,7 +1,7 @@
 package backend.payment.methods.instances;
 
 import backend.payment.methods.framework.PaymentMethod;
-import dao.payment.methods.instances.BankingAccountDao;
+import data.access.payment.methods.instances.BankingAccountDao;
 
 import java.util.Map;
 import java.util.regex.Pattern;

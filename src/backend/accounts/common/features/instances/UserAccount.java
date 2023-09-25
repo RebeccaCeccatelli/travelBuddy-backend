@@ -1,7 +1,7 @@
 package backend.accounts.common.features.instances;
 
 import backend.accounts.common.features.framework.Account;
-import dao.accounts.instances.UserAccountDao;
+import data.access.accounts.instances.UserAccountDao;
 
 import java.sql.Date;
 import java.util.Objects;
