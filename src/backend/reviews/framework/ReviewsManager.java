@@ -11,50 +11,6 @@ public abstract class ReviewsManager {
     protected ArrayList<Review> reviews = new ArrayList<>();
     BookingsManager bookingsManager;
 
-    public ReviewsManager(int accountId, BookingsManager bookingsManager) {
-        reviews = loadAllReviews(accountId);
-        this.bookingsManager = bookingsManager;
-    }
-
-    protected abstract ArrayList<Review> loadAllReviews(int accountId);
-
-    public boolean addReview(int bookingId, String reviewText, double rating,
-                             Object... serviceSpecificInformation) {
-        boolean created = false;
-
-        Review review;
-        Booking booking = bookingsManager.findBookingById(bookingId);
-        if (booking != null) {
-            if (!reviewAlreadyExists(bookingId)) {
-                if (bookingsManager.isBookingSuccessful(bookingId)) {
-                    if (booking instanceof ToiletBooking) {
-                        review = new ToiletReview();
-                    } else if (booking instanceof WiFiHotspotBooking) {
-                        review = new WiFiHotspotReview();
-                    } else if (booking instanceof LuggageDepositBooking) {
-                        review = new LuggageDepositReview();
-                    } else if (booking instanceof ParkingLotBooking) {
-                        review = new ParkingLotReview();
-                    } else if (booking instanceof TouristicAttractionBooking) {
-                        review = new TouristicAttractionReview();
-                    } else if (booking instanceof DiningOptionBooking) {
-                        review = new DiningOptionReview();
-                    } else if (booking instanceof AccomodationBooking) {
-                        review = new AccomodationReview();
-                    }
-                    else {
-                        return created;
-                    }
-                    created = review.create(bookingId, reviewText, rating, serviceSpecificInformation);
-                    if (created) {
-                        reviews.add(review);
-                    }
-                }
-            }
-        }
-        return created;
-    }
-
     public boolean removeReview(int bookingId) {
         boolean removed = false;
         Review review = findReviewByBookingId(bookingId);
@@ -66,6 +22,13 @@ public abstract class ReviewsManager {
         }
         return removed;
     }
+
+    public ReviewsManager(int accountId, BookingsManager bookingsManager) {
+        reviews = loadAllReviews(accountId);
+        this.bookingsManager = bookingsManager;
+    }
+
+    protected abstract ArrayList<Review> loadAllReviews(int accountId);
 
     public ArrayList<Review> getReviews() {
         return reviews;
@@ -118,6 +81,42 @@ public abstract class ReviewsManager {
             }
         }
         return averageRating;
+    }
+    public boolean addReview(int bookingId, String reviewText, double rating,
+                             Object... serviceSpecificInformation) {
+        boolean created = false;
+
+        Review review;
+        Booking booking = bookingsManager.findBookingById(bookingId);
+        if (booking != null) {
+            if (!reviewAlreadyExists(bookingId)) {
+                if (bookingsManager.isBookingSuccessful(bookingId)) {
+                    if (booking instanceof ToiletBooking) {
+                        review = new ToiletReview();
+                    } else if (booking instanceof WiFiHotspotBooking) {
+                        review = new WiFiHotspotReview();
+                    } else if (booking instanceof LuggageDepositBooking) {
+                        review = new LuggageDepositReview();
+                    } else if (booking instanceof ParkingLotBooking) {
+                        review = new ParkingLotReview();
+                    } else if (booking instanceof TouristicAttractionBooking) {
+                        review = new TouristicAttractionReview();
+                    } else if (booking instanceof DiningOptionBooking) {
+                        review = new DiningOptionReview();
+                    } else if (booking instanceof AccomodationBooking) {
+                        review = new AccomodationReview();
+                    }
+                    else {
+                        return created;
+                    }
+                    created = review.create(bookingId, reviewText, rating, serviceSpecificInformation);
+                    if (created) {
+                        reviews.add(review);
+                    }
+                }
+            }
+        }
+        return created;
     }
 }
 

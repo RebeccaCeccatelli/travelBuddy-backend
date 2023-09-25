@@ -7,6 +7,7 @@ import backend.accounts.common.features.framework.Account;
 import backend.accounts.common.features.framework.Address;
 import backend.accounts.common.features.instances.ProviderAccount;
 import backend.reviews.framework.ReviewsManager;
+import backend.reviews.framework.Review;
 import backend.reviews.instances.manager.ProviderReviewsManager;
 import backend.services.framework.Service;
 import backend.services.framework.ServiceStatus;

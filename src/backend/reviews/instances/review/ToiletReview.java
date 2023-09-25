@@ -11,6 +11,16 @@ public class ToiletReview extends Review {
     Double accessibility;
 
     @Override
+    protected boolean delete() {
+        return new ToiletReviewDao().remove(id);
+    }
+
+    @Override
+    public String getServiceReviewed() {
+        return "Toilet";
+    }
+
+    @Override
     protected boolean setServiceSpecificInfo(Object... serviceSpecificInformation) {
         boolean valid = false;
         if (serviceSpecificInformation != null && serviceSpecificInformation.length > 0) {
@@ -48,15 +58,5 @@ public class ToiletReview extends Review {
     protected int save() {
         return new ToiletReviewDao().save(bookingId, reviewText, rating, cleanliness,
                 productsQuality, bathroomSize, quietness, accessibility);
-    }
-
-    @Override
-    protected boolean delete() {
-        return new ToiletReviewDao().remove(id);
-    }
-
-    @Override
-    public String getServiceReviewed() {
-        return "Toilet";
     }
 }

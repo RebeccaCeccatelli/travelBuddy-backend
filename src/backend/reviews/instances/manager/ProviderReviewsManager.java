@@ -1,6 +1,7 @@
 package backend.reviews.instances.manager;
 
 import backend.bookings.framework.BookingsManager;
+import backend.reviews.framework.Review;
 import backend.reviews.framework.ReviewsManager;
 import data.access.reviews.framework.ReviewDao;
 

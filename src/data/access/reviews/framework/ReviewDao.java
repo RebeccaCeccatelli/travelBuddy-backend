@@ -19,6 +19,7 @@ public abstract class ReviewDao extends Dao {
         return id;
     }
 
+
     public boolean remove(int reviewId) {
         boolean removed = false;
         if (removeServiceSpecifInfo(reviewId)) {
@@ -94,47 +95,6 @@ public abstract class ReviewDao extends Dao {
         return reviews;
     }
 
-    private int saveGeneralInfo(int bookingId, String reviewText, Double rating) {
-        int id = 0;
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-
-            String insertQuery = "INSERT INTO  " + getTableName() + " (bookingId, reviewText, rating) " +
-                    "VALUES (?, ?, ?)";
-
-            preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1, bookingId);
-            preparedStatement.setString(2, reviewText);
-            preparedStatement.setDouble(3, rating);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                resultSet = preparedStatement.getGeneratedKeys();
-                if (resultSet.next()) {
-                    id = resultSet.getInt(1);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (resultSet != null) resultSet.close();
-                if (preparedStatement != null) preparedStatement.close();
-                if (connection != null) connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return id;
-    }
-
-    protected abstract void saveServiceSpecificInfo(int reviewId, Object... serviceSpecificInfo);
-
     protected void saveServiceType(int id, String service) {
         String updateQuery = "UPDATE" + getTableName() + " SET service = ? WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -190,4 +150,45 @@ public abstract class ReviewDao extends Dao {
     private static String selectColumn(String accountType) {
         return accountType.equals("Provider") ? "providerId" : "userId";
     }
+    private int saveGeneralInfo(int bookingId, String reviewText, Double rating) {
+        int id = 0;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
+            String insertQuery = "INSERT INTO  " + getTableName() + " (bookingId, reviewText, rating) " +
+                    "VALUES (?, ?, ?)";
+
+            preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, bookingId);
+            preparedStatement.setString(2, reviewText);
+            preparedStatement.setDouble(3, rating);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                resultSet = preparedStatement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    id = resultSet.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return id;
+    }
+
+    protected abstract void saveServiceSpecificInfo(int reviewId, Object... serviceSpecificInfo);
+
 }

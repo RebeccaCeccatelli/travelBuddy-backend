@@ -6,13 +6,6 @@ public abstract class Review {
     protected String reviewText;
     protected Double rating;
 
-    public void initialize(int id, int bookingId, String reviewText, Double rating, Object... serviceSpecificInfo) {
-        if (id != 0) {
-            setId(id);
-            setInfo(bookingId, reviewText, rating, serviceSpecificInfo);
-        }
-    }
-
     public boolean create(int bookingId, String reviewText, Double rating, Object... serviceSpecificInfo) {
         boolean created = false;
         if (setInfo(bookingId, reviewText, rating, serviceSpecificInfo)) {
@@ -25,6 +18,24 @@ public abstract class Review {
         return created;
     }
 
+    protected boolean isRatingValid(double rating) {
+        boolean valid = false;
+        if (rating >= 1.0 && rating <= 10.0) {
+            double remainder = rating % 0.5;
+            if (remainder == 0.0) {
+                valid = true;
+            }
+        }
+        return valid;
+    }
+    protected abstract boolean delete();
+    public void initialize(int id, int bookingId, String reviewText, Double rating, Object... serviceSpecificInfo) {
+        if (id != 0) {
+            setId(id);
+            setInfo(bookingId, reviewText, rating, serviceSpecificInfo);
+        }
+    }
+    public abstract String getServiceReviewed();
     public boolean remove() {
         boolean removed = false;
         if (delete()) {
@@ -58,22 +69,7 @@ public abstract class Review {
         return valid;
     }
 
-    protected boolean isRatingValid(double rating) {
-        boolean valid = false;
-        if (rating >= 1.0 && rating <= 10.0) {
-            double remainder = rating % 0.5;
-            if (remainder == 0.0) {
-                valid = true;
-            }
-        }
-        return valid;
-    }
-
     protected abstract boolean setServiceSpecificInfo(Object... serviceSpecificInformation);
 
     protected abstract int save();
-
-    protected abstract boolean delete();
-
-    public abstract String getServiceReviewed();
 }

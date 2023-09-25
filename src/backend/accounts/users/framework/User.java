@@ -9,6 +9,7 @@ import backend.accounts.common.features.framework.Address;
 import backend.accounts.common.features.instances.UserAccount;
 import backend.payment.methods.framework.PaymentMethod;
 import backend.payment.methods.framework.PaymentMethodsManager;
+import backend.reviews.framework.Review;
 import backend.reviews.framework.ReviewsManager;
 import backend.reviews.instances.manager.UserReviewsManager;
 
